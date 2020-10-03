@@ -4,11 +4,14 @@
   "description": "Test task LLC \"NIR\"",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server",
+    "eslint": "eslint --ext .jsx --ext .js src/"
   },
   "author": "MasterOfMenace",
   "license": "ISC",
   "dependencies": {
+    "formik": "^2.1.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
