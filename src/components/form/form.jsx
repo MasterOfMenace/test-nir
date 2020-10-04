@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Input from '../input/input.jsx';
+import {organizationInputs, ceoInputs, addressInputs} from '../../mocks/mocks.js';
 
 class MyForm extends React.Component {
   constructor(props) {
@@ -164,41 +166,42 @@ class MyForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.submitHandler}>
-          <label htmlFor="centerName">Полное наименование испытательной лаборатории</label>
-          <input type='text' id='centerName' name='centerName' placeholder='ВНИИТОРМОЗ' onChange={this.onInputChangeHandler}
-          style={this.state.errors.centerName ? {borderColor: 'red'} : null}/>
-          <label htmlFor="shortCenterName">Полное наименование испытательной лаборатории</label>
-          <input type='text' id='shortCenterName' name='shortCenterName' placeholder='Некоммерческая организация учреждение ВНИИТОРМОЗ' onChange={this.onInputChangeHandler}/>
-          <label htmlFor="email">Адрес электронной почты</label>
-          <input type='text' id='email' name='email' placeholder='info@test.ru' onChange={this.onInputChangeHandler}/>
-          <label htmlFor="phone">Телефон</label>
-          <input type='text' id='phone' name='phone' placeholder='+7(495)123-45-67' onChange={this.onInputChangeHandler}/>
-          <label htmlFor="webPage">Сайт</label>
-          <input type='text' id='webPage' name='webPage' placeholder='test.ru' onChange={this.onInputChangeHandler}/>
-
+        {organizationInputs.map((input) => (
+          <Input
+            key={`${input.id}-key`}
+            label={input.label}
+            type={input.type}
+            id={input.id}
+            name={input.name}
+            placeholder={input.placeholder}
+            onChange={this.onInputChangeHandler}
+            errors={this.state.errors} />
+        ))}
           <h2>Руководитель</h2>
-          <label htmlFor="surname">Фамилия</label>
-          <input type='text' id='surname' name='surname' placeholder='Иванов' onChange={this.onInputChangeHandler}/>
-          <label htmlFor="firstName">Имя</label>
-          <input type='text' id='firstName' name='firstName' placeholder='Иван' onChange={this.onInputChangeHandler}/>
-          <label htmlFor="patronym">Отчество</label>
-          <input type='text' id='patronym' name='patronym' placeholder='Иванович' onChange={this.onInputChangeHandler}/>
+          {ceoInputs.map((input) => (
+            <Input
+              key={`${input.id}-key`}
+              label={input.label}
+              type={input.type}
+              id={input.id}
+              name={input.name}
+              placeholder={input.placeholder}
+              onChange={this.onInputChangeHandler}
+              errors={this.state.errors} />
+          ))}
 
           <h2>Фактический адрес</h2>
-          <label htmlFor="country">Страна</label>
-          <input type='text' id='country' name='country' placeholder='Россия' onChange={this.onInputChangeHandler}/>
-          <label htmlFor="zipCode">Почтовый индекс</label>
-          <input type='text' id='zipCode' name='zipCode' placeholder='123456' onChange={this.onInputChangeHandler}/>
-          <label htmlFor="region">Регион/область</label>
-          <input type='text' id='region' name='region' placeholder='Московская область' onChange={this.onInputChangeHandler}/>
-          <label htmlFor="district">Город/район</label>
-          <input type='text' id='district' name='district' placeholder='Ленинский район' onChange={this.onInputChangeHandler}/>
-          <label htmlFor="location">Населенный пункт</label>
-          <input type='text' id='location' name='location' placeholder='пос. Развилка' onChange={this.onInputChangeHandler}/>
-          <label htmlFor="street">Улица</label>
-          <input type='text' id='street' name='street' placeholder='Проектируемый проезд №666' onChange={this.onInputChangeHandler}/>
-          <label htmlFor="building">Дом и офис</label>
-          <input type='text' id='building' name='building' placeholder='вл. 15, стр. 1, ВНИИТОРМОЗ' onChange={this.onInputChangeHandler}/>
+          {addressInputs.map((input) => (
+            <Input
+              key={`${input.id}-key`}
+              label={input.label}
+              type={input.type}
+              id={input.id}
+              name={input.name}
+              placeholder={input.placeholder}
+              onChange={this.onInputChangeHandler}
+              errors={this.state.errors} />
+          ))}
 
           <h2>Признание в системе</h2>
           <div>
