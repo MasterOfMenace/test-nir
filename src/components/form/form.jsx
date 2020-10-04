@@ -6,26 +6,29 @@ class MyForm extends React.Component {
     super(props);
 
     this.state = {
-      centerName: '',
-      shortCenterName: '',
-      email: '',
-      phone: '',
-      webPage: '',
-      surname: '',
-      firstName: '',
-      patronym: '',
-      country: '',
-      zipCode: '',
-      region: '',
-      district: '',
-      location: '',
-      street: '',
-      building: '',
+      fields: {
+        centerName: '',
+        shortCenterName: '',
+        email: '',
+        phone: '',
+        webPage: '',
+        surname: '',
+        firstName: '',
+        patronym: '',
+        country: '',
+        zipCode: '',
+        region: '',
+        district: '',
+        location: '',
+        street: '',
+        building: '',
+      },
       association: false,
       department: {
         management: false,
         security: false,
       },
+      errors: {},
     }
 
     this.onInputChangeHandler = this.onInputChangeHandler.bind(this);
@@ -109,24 +112,61 @@ class MyForm extends React.Component {
       this.setState({
         department: department
       });
-    } else {
+    } else if (name === 'association'){
       this.setState({
         [name]: value
+      })
+    } else {
+      const fields = {...this.state.fields, [name]: value};
+
+      this.setState({
+        fields: fields
       });
+    }
+  }
+
+  validateForm() {
+    const fields = this.state.fields;
+    const keys = Object.keys(fields);
+    const isFormValid = keys
+      .map((key) => this.validateField(key, fields[key]))
+      .every((elem) => elem === true);
+
+    return isFormValid;
+  }
+
+  validateField(name, value) {
+    if(!value) {
+      this.setState(
+        ({ errors }) => ({
+          errors: {
+            ...errors,
+            [name]: 'поле не должно быть пустым',
+          },
+        }),
+        );
+        return false;
+    } else {
+      return true;
     }
   }
 
   submitHandler(evt) {
     evt.preventDefault();
 
-    console.log(JSON.stringify(this.state));
+    if (this.validateForm()) {
+      console.log(JSON.stringify(this.state));
+    } else {
+      console.log('form is invalid');
+    }
   }
 
   render() {
     return (
       <form onSubmit={this.submitHandler}>
           <label htmlFor="centerName">Полное наименование испытательной лаборатории</label>
-          <input type='text' id='centerName' name='centerName' placeholder='ВНИИТОРМОЗ' onChange={this.onInputChangeHandler}/>
+          <input type='text' id='centerName' name='centerName' placeholder='ВНИИТОРМОЗ' onChange={this.onInputChangeHandler}
+          style={this.state.errors.centerName ? {borderColor: 'red'} : null}/>
           <label htmlFor="shortCenterName">Полное наименование испытательной лаборатории</label>
           <input type='text' id='shortCenterName' name='shortCenterName' placeholder='Некоммерческая организация учреждение ВНИИТОРМОЗ' onChange={this.onInputChangeHandler}/>
           <label htmlFor="email">Адрес электронной почты</label>
