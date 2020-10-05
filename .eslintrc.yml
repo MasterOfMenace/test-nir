@@ -20,7 +20,4 @@ settings:
 
 rules: {
   react/sort-comp: [2],
-  quotes:
-    - error
-    - single
 }

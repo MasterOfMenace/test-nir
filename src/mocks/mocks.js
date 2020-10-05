@@ -110,4 +110,86 @@ export const addressInputs = [
     name: 'building',
     placeholder: 'вл. 15, стр. 1, ВНИИГАЗ',
   },
-]
+];
+
+export const systemAssociationCheckboxes = [
+  {
+    label: 'ЦОС "Системы менеджмента"',
+    type: 'checkbox',
+    name: 'department',
+    value: 'management',
+  },
+  {
+    label: 'ЦОС "Инженерно-технические средства охраны, средства защиты и информации"',
+    type: 'checkbox',
+    name: 'department',
+    value: 'security',
+  },
+  {
+    label: 'ЦОС "Трубная продукция"',
+    type: 'checkbox',
+    name: 'department',
+    value: 'tubes',
+  },
+  {
+    label: 'ЦОС "Технологическое оборудование и материалы, энергетическое оборудование, приборы и средства автоматизации, вычислительная техника, программные средства"',
+    type: 'checkbox',
+    name: 'department',
+    value: 'technologistEquipment',
+  },
+  {
+    label: 'ЦОС "Производственная безопасность"',
+    type: 'checkbox',
+    name: 'department',
+    value: 'industrialSafety',
+  },
+  {
+    label: 'ЦОС "Оборудование и материалы для сварки, неразрушающего контроля сварных соединений и врезки под давлением"',
+    type: 'checkbox',
+    name: 'department',
+    value: 'weldingEquipment',
+  },
+  {
+    label: 'ЦОС "Запасные части и комплектующие для технического обслуживания и ремонта"',
+    type: 'checkbox',
+    name: 'department',
+    value: 'serviceParts',
+  },
+  {
+    label: 'ЦОС "Газ, конденсат, нефть, продукты их переработки"',
+    type: 'checkbox',
+    name: 'department',
+    value: 'petroleum',
+  },
+];
+
+export const systemIdentificationSubformInputs = [
+  {
+    label: 'Регистрационный номер свидетельства',
+    type: 'text',
+    id: 'certificateNumber',
+    name: 'certificateNumber',
+    placeholder: '',
+  },
+  {
+    label: 'Дата выдачи свидетельства',
+    type: 'text',
+    id: 'certificateDate',
+    name: 'certificateDate',
+    placeholder: '',
+  },
+  {
+    label: 'Действителен до',
+    type: 'text',
+    id: 'certificateValidity',
+    name: 'certificateValidity',
+    placeholder: '',
+  },
+  {
+    label: 'Область деятельности (ОК 034-2014)',
+    type: 'text',
+    id: 'activityField',
+    name: 'activityField',
+    placeholder: '',
+  },
+];
