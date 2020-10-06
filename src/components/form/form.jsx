@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Input from '../input/input.jsx';
 import SystemIdentificationForm from '../system-identification/system-identification.jsx';
 import {organizationInputs, ceoInputs, addressInputs} from '../../mocks/mocks.js';
@@ -32,11 +31,47 @@ class MyForm extends React.Component {
         security: false,
       },
       errors: {},
-    }
+    };
 
     this.onInputChangeHandler = this.onInputChangeHandler.bind(this);
-    this.onLicenseInputChangeHandler=this.onLicenseInputChangeHandler.bind(this);
+    this.onLicenseInputChangeHandler = this.onLicenseInputChangeHandler.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
+    this.onLicenseAddButtonClickHandler = this.onLicenseAddButtonClickHandler.bind(this);
+    this.onLicenseDeleteButtonClickHandler = this.onLicenseDeleteButtonClickHandler.bind(this);
+  }
+
+  onLicenseDeleteButtonClickHandler(departmentName, license) {
+    return () => {
+      const activityField = new Set(this.state.department[`${departmentName}-activityField`]);
+      activityField.delete(license);
+      const newActivityField = Array.from(activityField);
+
+      const department = {...this.state.department, [`${departmentName}-activityField`]: newActivityField
+      };
+
+      this.setState({
+        department
+      });
+    };
+  }
+
+  onLicenseAddButtonClickHandler(departmentName) {
+    return () => {
+      const field = document.getElementById('activityField');
+      const name = `${departmentName}-${field.name}`;
+      const value = field.value;
+      const activityField = this.state.department[name] ? [...this.state.department[name]] : [];
+      activityField.push(value);
+      const newActivityField = Array.from(new Set(activityField));
+      const department = {...this.state.department, [name]: newActivityField
+      };
+
+      this.setState({
+        department
+      });
+
+      field.value = '';
+    };
   }
 
   onLicenseInputChangeHandler(departmentName) {
@@ -45,12 +80,16 @@ class MyForm extends React.Component {
       const value = target.value;
       const name = `${departmentName}-${target.name}`;
 
-      const department = {...this.state.department, [name]: value};
+      if (target.name === 'activityField') {
+        return;
+      } else {
+        const department = {...this.state.department, [name]: value};
 
-      this.setState({
-        department: department
-      });
-    }
+        this.setState({
+          department
+        });
+      }
+    };
   }
 
   onInputChangeHandler(evt) {
@@ -60,29 +99,29 @@ class MyForm extends React.Component {
     const checked = target.checked;
 
     this.setState(
-      ({ errors }) => ({
-        errors: {
-          ...errors,
-          [name]: '',
-        },
-      }),
+        ({errors}) => ({
+          errors: {
+            ...errors,
+            [name]: '',
+          },
+        }),
     );
 
     if (target.name === 'department') {
       const department = {...this.state.department, [value]: checked};
 
       this.setState({
-        department: department
+        department
       });
-    } else if (name === 'association'){
+    } else if (name === 'association') {
       this.setState({
         [name]: value
-      })
+      });
     } else {
       const fields = {...this.state.fields, [name]: value};
 
       this.setState({
-        fields: fields
+        fields
       });
     }
   }
@@ -98,16 +137,16 @@ class MyForm extends React.Component {
   }
 
   validateField(name, value) {
-    if(!value) {
+    if (!value) {
       this.setState(
-        ({ errors }) => ({
-          errors: {
-            ...errors,
-            [name]: 'поле не должно быть пустым',
-          },
-        }),
-        );
-        return false;
+          ({errors}) => ({
+            errors: {
+              ...errors,
+              [name]: 'поле не должно быть пустым',
+            },
+          }),
+      );
+      return false;
     } else {
       return true;
     }
@@ -137,57 +176,59 @@ class MyForm extends React.Component {
             onChange={this.onInputChangeHandler}
             errors={this.state.errors} />
         ))}
-          <h2>Руководитель</h2>
-          {ceoInputs.map((input) => (
-            <Input
-              key={`${input.id}-key`}
-              label={input.label}
-              type={input.type}
-              id={input.id}
-              name={input.name}
-              placeholder={input.placeholder}
-              onChange={this.onInputChangeHandler}
-              errors={this.state.errors} />
-          ))}
+        <h2>Руководитель</h2>
+        {ceoInputs.map((input) => (
+          <Input
+            key={`${input.id}-key`}
+            label={input.label}
+            type={input.type}
+            id={input.id}
+            name={input.name}
+            placeholder={input.placeholder}
+            onChange={this.onInputChangeHandler}
+            errors={this.state.errors} />
+        ))}
 
-          <h2>Фактический адрес</h2>
-          {addressInputs.map((input) => (
-            <Input
-              key={`${input.id}-key`}
-              label={input.label}
-              type={input.type}
-              id={input.id}
-              name={input.name}
-              placeholder={input.placeholder}
-              onChange={this.onInputChangeHandler}
-              errors={this.state.errors} />
-          ))}
+        <h2>Фактический адрес</h2>
+        {addressInputs.map((input) => (
+          <Input
+            key={`${input.id}-key`}
+            label={input.label}
+            type={input.type}
+            id={input.id}
+            name={input.name}
+            placeholder={input.placeholder}
+            onChange={this.onInputChangeHandler}
+            errors={this.state.errors} />
+        ))}
 
-          <h2>Признание в системе</h2>
-          <div>
-            <label>
-              <input type='radio' name='association' value={true}
+        <h2>Признание в системе</h2>
+        <div>
+          <label>
+            <input type='radio' name='association' value={true}
               onChange={this.onInputChangeHandler}/>
               Да
-            </label>
-            <label>
-              <input type='radio' name='association'
+          </label>
+          <label>
+            <input type='radio' name='association'
               value={false}
               onChange={this.onInputChangeHandler}/>
               Нет
-            </label>
+          </label>
 
-            {this.state.association === 'true' ?
-              <SystemIdentificationForm
-                department={this.state.department}
-                onChange={this.onInputChangeHandler}
-                onLicenseChange={this.onLicenseInputChangeHandler}
-                errors={this.state.errors} /> : null}
-          </div>
+          {this.state.association === 'true' ?
+            <SystemIdentificationForm
+              department={this.state.department}
+              onChange={this.onInputChangeHandler}
+              onLicenseChange={this.onLicenseInputChangeHandler}
+              errors={this.state.errors}
+              onAddButtonClickHandler={this.onLicenseAddButtonClickHandler}
+              onDeleteButtonClickHandler={this.onLicenseDeleteButtonClickHandler}/> : null}
+        </div>
 
-          <button type="submit">Далее</button>
-        </form>
-    )
+        <button type="submit">Далее</button>
+      </form>
+    );
   }
 }
 

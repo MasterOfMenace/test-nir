@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -33,5 +32,15 @@ class Input extends React.Component {
     );
   }
 }
+
+Input.propTypes = {
+  label: PropTypes.string,
+  type: PropTypes.string,
+  id: PropTypes.string,
+  name: PropTypes.string,
+  placeholder: PropTypes.string,
+  onChange: PropTypes.func,
+  errors: PropTypes.object
+};
 
 export default Input;

@@ -32,8 +32,11 @@ class SystemIdentificationForm extends React.Component {
     );
   }
 
-  renderSystemIdentificationSubForm(department) {
-    const {onLicenseChange, errors} = this.props;
+  renderSystemIdentificationSubForm(departmentName) {
+    const {onLicenseChange, errors, onAddButtonClickHandler, department, onDeleteButtonClickHandler} = this.props;
+
+    const licenses = department[`${departmentName}-activityField`] ? Array.from(department[`${departmentName}-activityField`]) : [];
+    console.log(licenses);
 
     return (
       <div>
@@ -45,13 +48,21 @@ class SystemIdentificationForm extends React.Component {
             id={input.id}
             name={input.name}
             placeholder={input.placeholder}
-            onChange={onLicenseChange(department)}
+            onChange={onLicenseChange(departmentName)}
             errors={errors}
           />
         ))}
-        <button type='button'>Добавить</button>
+        <button type='button' onClick={onAddButtonClickHandler(departmentName)}>Добавить</button>
+        <div>
+          {licenses.map((license, i) => (
+            <div key={i}>
+              {license}
+              <button type='button' onClick={onDeleteButtonClickHandler(departmentName, license)}>Delete</button>
+            </div>
+          ))}
+        </div>
       </div>
-    )
+    );
   }
 
   render() {
@@ -62,5 +73,14 @@ class SystemIdentificationForm extends React.Component {
     );
   }
 }
+
+SystemIdentificationForm.propTypes = {
+  department: PropTypes.object,
+  errors: PropTypes.object,
+  onChange: PropTypes.func,
+  onLicenseChange: PropTypes.func,
+  onAddButtonClickHandler: PropTypes.func,
+  onDeleteButtonClickHandler: PropTypes.func
+};
 
 export default SystemIdentificationForm;
