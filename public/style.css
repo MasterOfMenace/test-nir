@@ -1,0 +1,48 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 50%;
+  padding: 20px;
+  color: #a5a5a5;
+  font-size: 12px;
+}
+
+.form__input {
+  font-size: 12px;
+  padding: 8px;
+  border: 1px solid #bfbfbf;
+  border-radius: 6px;
+}
+
+.form__title {
+  margin: 0;
+  padding: 0;
+  color: #595959;
+  font-size: 14px;
+}
+
+.form__association {
+  display: flex;
+  flex-direction: column;
+}
+
+.form__association-subform {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.form__checkbox-label {
+  color: #595959;
+}
+
+.submit-button {
+  width: 25%;
+  background-color: #0b7abf;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+}
