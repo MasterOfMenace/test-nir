@@ -15,7 +15,7 @@ export const organizationInputs = [
   },
   {
     label: 'Адрес электронной почты',
-    type: 'email',
+    type: 'text',
     id: 'email',
     name: 'email',
     placeholder: 'info@test.ru',

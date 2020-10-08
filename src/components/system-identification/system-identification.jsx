@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Input from '../input/input.jsx';
-import {systemAssociationCheckboxes as checkboxes, systemIdentificationSubformInputs as inputs} from '../../mocks/mocks.js';
 
 class SystemIdentificationForm extends React.Component {
   constructor(props) {
@@ -9,14 +8,15 @@ class SystemIdentificationForm extends React.Component {
   }
 
   renderSystemIdentificationForm() {
-    const {department, onChange} = this.props;
+    const {department, checkboxes, onChange, errors} = this.props;
+    // console.log(errors);
 
     return (
       <>
-        <h2>Центральный орган системы, выдавший свидетельство испытательной лаборатории</h2>
+        <h2 className='form__title'>Центральный орган системы, выдавший свидетельство испытательной лаборатории</h2>
         {checkboxes.map((checkbox, i) => (
           <div key={`checkbox-${i}`}>
-            <label>
+            <label className='form__checkbox-label' style={!errors[checkbox.value] ? null : {color: 'red'}}>
               <input
                 name={checkbox.name}
                 type={checkbox.type}
@@ -33,31 +33,34 @@ class SystemIdentificationForm extends React.Component {
   }
 
   renderSystemIdentificationSubForm(departmentName) {
-    const {onLicenseChange, errors, onAddButtonClickHandler, department, onDeleteButtonClickHandler} = this.props;
+    const {inputs, onLicenseChange, errors, onAddButtonClickHandler, department, onDeleteButtonClickHandler, onActivityChange} = this.props;
 
     const licenses = department[`${departmentName}-activityField`] ? Array.from(department[`${departmentName}-activityField`]) : [];
-    console.log(licenses);
+
+    const licenseInputError = errors[`${departmentName}-activityField`];
 
     return (
-      <div>
+      <div className={'form__association-subform'}>
         {inputs.map((input) => (
           <Input
-            key={`${input.id}-key`}
+            key={`${departmentName}-${input.id}-key`}
             label={input.label}
             type={input.type}
-            id={input.id}
-            name={input.name}
+            id={`${departmentName}-${input.id}`}
+            name={`${departmentName}-${input.name}`}
+            className={'form__input'}
             placeholder={input.placeholder}
-            onChange={onLicenseChange(departmentName)}
+            onChange={input.name === 'activityField' ? onActivityChange() : onLicenseChange()}
             errors={errors}
           />
         ))}
-        <button type='button' onClick={onAddButtonClickHandler(departmentName)}>Добавить</button>
+        {licenseInputError ?
+          null : <button type='button' onClick={onAddButtonClickHandler(departmentName)}>Добавить</button>}
         <div>
           {licenses.map((license, i) => (
             <div key={i}>
               {license}
-              <button type='button' onClick={onDeleteButtonClickHandler(departmentName, license)}>Delete</button>
+              <button type='button' onClick={onDeleteButtonClickHandler(departmentName, license)}>Удалить</button>
             </div>
           ))}
         </div>
@@ -75,12 +78,15 @@ class SystemIdentificationForm extends React.Component {
 }
 
 SystemIdentificationForm.propTypes = {
-  department: PropTypes.object,
-  errors: PropTypes.object,
-  onChange: PropTypes.func,
-  onLicenseChange: PropTypes.func,
-  onAddButtonClickHandler: PropTypes.func,
-  onDeleteButtonClickHandler: PropTypes.func
+  department: PropTypes.object.isRequired,
+  checkboxes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  inputs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  errors: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onLicenseChange: PropTypes.func.isRequired,
+  onActivityChange: PropTypes.func.isRequired,
+  onAddButtonClickHandler: PropTypes.func.isRequired,
+  onDeleteButtonClickHandler: PropTypes.func.isRequired
 };
 
 export default SystemIdentificationForm;

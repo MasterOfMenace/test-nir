@@ -12,6 +12,7 @@ class Input extends React.Component {
       type,
       id,
       name,
+      className,
       placeholder,
       onChange,
       errors
@@ -24,6 +25,7 @@ class Input extends React.Component {
           type={type}
           id={id}
           name={name}
+          className={className}
           placeholder={placeholder}
           onChange={onChange}
           style={errors[id] ? {borderColor: 'red'} : null}/>
@@ -34,13 +36,14 @@ class Input extends React.Component {
 }
 
 Input.propTypes = {
-  label: PropTypes.string,
-  type: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
   id: PropTypes.string,
-  name: PropTypes.string,
-  placeholder: PropTypes.string,
-  onChange: PropTypes.func,
-  errors: PropTypes.object
+  name: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 export default Input;

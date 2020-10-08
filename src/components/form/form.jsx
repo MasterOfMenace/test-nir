@@ -1,8 +1,8 @@
 import React from 'react';
 import Input from '../input/input.jsx';
 import SystemIdentificationForm from '../system-identification/system-identification.jsx';
-import {organizationInputs, ceoInputs, addressInputs} from '../../mocks/mocks.js';
-
+import {organizationInputs, ceoInputs, addressInputs, systemAssociationCheckboxes as systemCheckboxes, systemIdentificationSubformInputs as systemInputs} from '../../mocks/mocks.js';
+import {validateField, validateActivityField} from '../validation/validation.js';
 class MyForm extends React.Component {
   constructor(props) {
     super(props);
@@ -38,6 +38,7 @@ class MyForm extends React.Component {
     this.submitHandler = this.submitHandler.bind(this);
     this.onLicenseAddButtonClickHandler = this.onLicenseAddButtonClickHandler.bind(this);
     this.onLicenseDeleteButtonClickHandler = this.onLicenseDeleteButtonClickHandler.bind(this);
+    this.onActivityFieldInputChangeHandler = this.onActivityFieldInputChangeHandler.bind(this);
   }
 
   onLicenseDeleteButtonClickHandler(departmentName, license) {
@@ -57,8 +58,8 @@ class MyForm extends React.Component {
 
   onLicenseAddButtonClickHandler(departmentName) {
     return () => {
-      const field = document.getElementById('activityField');
-      const name = `${departmentName}-${field.name}`;
+      const field = document.getElementById(`${departmentName}-activityField`);
+      const name = field.name;
       const value = field.value;
       const activityField = this.state.department[name] ? [...this.state.department[name]] : [];
       activityField.push(value);
@@ -74,21 +75,54 @@ class MyForm extends React.Component {
     };
   }
 
-  onLicenseInputChangeHandler(departmentName) {
+  onLicenseInputChangeHandler() {
     return (evt) => {
       const target = evt.target;
       const value = target.value;
-      const name = `${departmentName}-${target.name}`;
+      const name = target.name;
 
-      if (target.name === 'activityField') {
-        return;
-      } else {
-        const department = {...this.state.department, [name]: value};
+      this.setState(
+          ({errors}) => ({
+            errors: {
+              ...errors,
+              [name]: '',
+            },
+          }),
+      );
 
-        this.setState({
-          department
-        });
-      }
+      const department = {...this.state.department, [name]: value};
+
+      this.setState({
+        department
+      });
+    };
+  }
+
+  onActivityFieldInputChangeHandler() {
+    return (evt) => {
+      const target = evt.target;
+      const value = target.value;
+      const name = target.name;
+      const newErrors = {};
+
+      this.setState(
+          ({errors}) => ({
+            errors: {
+              ...errors,
+              [name]: '',
+            }
+          })
+      );
+      validateActivityField(name, value, newErrors);
+
+      this.setState(
+          ({errors}) => ({
+            errors: {
+              ...errors,
+              ...newErrors,
+            }
+          })
+      );
     };
   }
 
@@ -109,9 +143,18 @@ class MyForm extends React.Component {
 
     if (target.name === 'department') {
       const department = {...this.state.department, [value]: checked};
+      const checkboxes = systemCheckboxes.map((it) => it.value);
+      const newErrors = {};
+      checkboxes.forEach((it) => {
+        newErrors[it] = '';
+      });
 
       this.setState({
-        department
+        department,
+        errors: {
+          ...this.state.errors,
+          ...newErrors
+        }
       });
     } else if (name === 'association') {
       this.setState({
@@ -126,36 +169,61 @@ class MyForm extends React.Component {
     }
   }
 
+  showFirstInvalidField(errors) {
+    const elementId = Object.keys(errors)[0];
+    const element = document.getElementById(elementId);
+    element.scrollIntoView();
+  }
+
   validateForm() {
+    const newErrors = {};
+    let validity = [];
+    // inputs
+
     const fields = this.state.fields;
     const keys = Object.keys(fields);
-    const isFormValid = keys
-      .map((key) => this.validateField(key, fields[key]))
-      .every((elem) => elem === true);
+    validity = validity.concat(keys.map((key) => validateField(key, fields[key], newErrors)));
+
+    // checkboxes
+    const association = this.state.association;
+
+    if (association === 'true') {
+      const department = this.state.department;
+      const checkboxes = systemCheckboxes.map((checkbox) => checkbox.value);
+      const isChecked = Object.values(department).some((el) => el === true);
+      if (!isChecked) {
+        validity = validity.concat(checkboxes.map((key) => validateField(key, department[key], newErrors)));
+      } else {
+        // systeminputs
+        const departmentValues = Object.values(department);
+        const departmentKeys = Object.keys(department);
+        const departmentIndex = departmentValues.findIndex((it) => it === true);
+        const departmentName = departmentKeys[departmentIndex];
+        const licenses = department[`${departmentName}-activityField`];
+        console.log(licenses);
+        const inputs = systemInputs.map((it) => `${departmentName}-${it.name}`);
+        validity = validity.concat(inputs.map((it) => validateField(it, department[it], newErrors)));
+        console.log(inputs, departmentName);
+      }
+    }
+
+    this.setState({
+      errors: newErrors,
+    });
+    const isFormValid = validity.every((elem) => elem === true);
+
+    if (!isFormValid) {
+      this.showFirstInvalidField(newErrors);
+    }
 
     return isFormValid;
   }
 
-  validateField(name, value) {
-    if (!value) {
-      this.setState(
-          ({errors}) => ({
-            errors: {
-              ...errors,
-              [name]: 'поле не должно быть пустым',
-            },
-          }),
-      );
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   submitHandler(evt) {
     evt.preventDefault();
+    const isFormValid = this.validateForm();
 
-    if (this.validateForm()) {
+    if (isFormValid) {
       console.log(JSON.stringify(this.state));
     } else {
       console.log('form is invalid');
@@ -164,7 +232,9 @@ class MyForm extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.submitHandler}>
+      <form
+        className='form'
+        onSubmit={this.submitHandler}>
         {organizationInputs.map((input) => (
           <Input
             key={`${input.id}-key`}
@@ -172,11 +242,12 @@ class MyForm extends React.Component {
             type={input.type}
             id={input.id}
             name={input.name}
+            className={'form__input'}
             placeholder={input.placeholder}
             onChange={this.onInputChangeHandler}
             errors={this.state.errors} />
         ))}
-        <h2>Руководитель</h2>
+        <h2 className='form__title'>Руководитель</h2>
         {ceoInputs.map((input) => (
           <Input
             key={`${input.id}-key`}
@@ -184,12 +255,13 @@ class MyForm extends React.Component {
             type={input.type}
             id={input.id}
             name={input.name}
+            className={'form__input'}
             placeholder={input.placeholder}
             onChange={this.onInputChangeHandler}
             errors={this.state.errors} />
         ))}
 
-        <h2>Фактический адрес</h2>
+        <h2 className='form__title'>Фактический адрес</h2>
         {addressInputs.map((input) => (
           <Input
             key={`${input.id}-key`}
@@ -197,13 +269,14 @@ class MyForm extends React.Component {
             type={input.type}
             id={input.id}
             name={input.name}
+            className={'form__input'}
             placeholder={input.placeholder}
             onChange={this.onInputChangeHandler}
             errors={this.state.errors} />
         ))}
 
-        <h2>Признание в системе</h2>
-        <div>
+        <h2 className='form__title'>Признание в системе</h2>
+        <div className='form__association'>
           <label>
             <input type='radio' name='association' value={true}
               onChange={this.onInputChangeHandler}/>
@@ -219,14 +292,17 @@ class MyForm extends React.Component {
           {this.state.association === 'true' ?
             <SystemIdentificationForm
               department={this.state.department}
+              checkboxes={systemCheckboxes}
+              inputs={systemInputs}
               onChange={this.onInputChangeHandler}
               onLicenseChange={this.onLicenseInputChangeHandler}
+              onActivityChange={this.onActivityFieldInputChangeHandler}
               errors={this.state.errors}
               onAddButtonClickHandler={this.onLicenseAddButtonClickHandler}
               onDeleteButtonClickHandler={this.onLicenseDeleteButtonClickHandler}/> : null}
         </div>
 
-        <button type="submit">Далее</button>
+        <button type="submit" className='submit-button'>Далее</button>
       </form>
     );
   }
