@@ -9,7 +9,6 @@ class SystemIdentificationForm extends React.Component {
 
   renderSystemIdentificationForm() {
     const {department, checkboxes, onChange, errors} = this.props;
-    // console.log(errors);
 
     return (
       <>
@@ -33,9 +32,9 @@ class SystemIdentificationForm extends React.Component {
   }
 
   renderSystemIdentificationSubForm(departmentName) {
-    const {inputs, onLicenseChange, errors, onAddButtonClickHandler, department, onDeleteButtonClickHandler, onActivityChange} = this.props;
+    const {inputs, onLicenseChange, errors, onAddButtonClickHandler, fields, onDeleteButtonClickHandler, onActivityChange} = this.props;
 
-    const licenses = department[`${departmentName}-activityField`] ? Array.from(department[`${departmentName}-activityField`]) : [];
+    const licenses = fields[`${departmentName}-activityField`] ? Array.from(fields[`${departmentName}-activityField`]) : [];
 
     const licenseInputError = errors[`${departmentName}-activityField`];
 
@@ -50,7 +49,7 @@ class SystemIdentificationForm extends React.Component {
             name={`${departmentName}-${input.name}`}
             className={'form__input'}
             placeholder={input.placeholder}
-            onChange={input.name === 'activityField' ? onActivityChange() : onLicenseChange()}
+            onChange={input.name === 'activityField' ? onActivityChange : onLicenseChange}
             errors={errors}
           />
         ))}
@@ -79,6 +78,7 @@ class SystemIdentificationForm extends React.Component {
 
 SystemIdentificationForm.propTypes = {
   department: PropTypes.object.isRequired,
+  fields: PropTypes.object.isRequired,
   checkboxes: PropTypes.arrayOf(PropTypes.object).isRequired,
   inputs: PropTypes.arrayOf(PropTypes.object).isRequired,
   errors: PropTypes.object.isRequired,

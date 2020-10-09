@@ -25,11 +25,8 @@ class MyForm extends React.Component {
         street: '',
         building: '',
       },
-      association: false,
-      department: {
-        management: false,
-        security: false,
-      },
+      association: 'no',
+      department: {},
       errors: {},
     };
 
@@ -43,15 +40,15 @@ class MyForm extends React.Component {
 
   onLicenseDeleteButtonClickHandler(departmentName, license) {
     return () => {
-      const activityField = new Set(this.state.department[`${departmentName}-activityField`]);
+      const activityField = new Set(this.state.fields[`${departmentName}-activityField`]);
       activityField.delete(license);
       const newActivityField = Array.from(activityField);
 
-      const department = {...this.state.department, [`${departmentName}-activityField`]: newActivityField
+      const fields = {...this.state.fields, [`${departmentName}-activityField`]: newActivityField
       };
 
       this.setState({
-        department
+        fields
       });
     };
   }
@@ -61,69 +58,67 @@ class MyForm extends React.Component {
       const field = document.getElementById(`${departmentName}-activityField`);
       const name = field.name;
       const value = field.value;
-      const activityField = this.state.department[name] ? [...this.state.department[name]] : [];
+      const activityField = this.state.fields[name] ? [...this.state.fields[name]] : [];
       activityField.push(value);
       const newActivityField = Array.from(new Set(activityField));
-      const department = {...this.state.department, [name]: newActivityField
+      const fields = {...this.state.fields, [name]: newActivityField
       };
 
       this.setState({
-        department
+        fields
       });
 
       field.value = '';
     };
   }
 
-  onLicenseInputChangeHandler() {
-    return (evt) => {
-      const target = evt.target;
-      const value = target.value;
-      const name = target.name;
+  onLicenseInputChangeHandler(evt) {
+    const target = evt.target;
+    const value = target.value;
+    const name = target.name;
 
-      this.setState(
-          ({errors}) => ({
-            errors: {
-              ...errors,
-              [name]: '',
-            },
-          }),
-      );
+    this.setState(
+        ({errors}) => ({
+          errors: {
+            ...errors,
+            [name]: '',
+          },
+        }),
+    );
 
-      const department = {...this.state.department, [name]: value};
-
-      this.setState({
-        department
-      });
+    const fields = {
+      ...this.state.fields,
+      [name]: value
     };
+
+    this.setState({
+      fields
+    });
   }
 
-  onActivityFieldInputChangeHandler() {
-    return (evt) => {
-      const target = evt.target;
-      const value = target.value;
-      const name = target.name;
-      const newErrors = {};
+  onActivityFieldInputChangeHandler(evt) {
+    const target = evt.target;
+    const value = target.value;
+    const name = target.name;
 
-      this.setState(
-          ({errors}) => ({
-            errors: {
-              ...errors,
-              [name]: '',
-            }
-          })
-      );
-      validateActivityField(name, value, newErrors);
+    this.setState(
+        ({errors}) => ({
+          errors: {
+            ...errors,
+            [name]: '',
+          }
+        })
+    );
+    const newErrors = validateActivityField(name, value);
 
-      this.setState(
-          ({errors}) => ({
-            errors: {
-              ...errors,
-              ...newErrors,
-            }
-          })
-      );
-    };
+    this.setState(
+        ({errors}) => ({
+          errors: {
+            ...errors,
+            ...newErrors,
+          }
+        })
+    );
   }
 
   onInputChangeHandler(evt) {
@@ -187,7 +182,7 @@ class MyForm extends React.Component {
     // checkboxes
     const association = this.state.association;
 
-    if (association === 'true') {
+    if (association === 'yes') {
       const department = this.state.department;
       const checkboxes = systemCheckboxes.map((checkbox) => checkbox.value);
       const isChecked = Object.values(department).some((el) => el === true);
@@ -197,13 +192,29 @@ class MyForm extends React.Component {
         // systeminputs
         const departmentValues = Object.values(department);
         const departmentKeys = Object.keys(department);
-        const departmentIndex = departmentValues.findIndex((it) => it === true);
-        const departmentName = departmentKeys[departmentIndex];
-        const licenses = department[`${departmentName}-activityField`];
-        console.log(licenses);
-        const inputs = systemInputs.map((it) => `${departmentName}-${it.name}`);
+        const departmentNames = [];
+
+        departmentValues.forEach((it, index) => {
+          if (it) {
+            departmentNames.push(departmentKeys[index]);
+          }
+        });
+
+        const inputs = departmentNames.reduce((acc, name) => {
+          return acc.concat(systemInputs.map((it) => {
+            const itemName = `${name}-${it.name}`;
+            const item = fields[itemName];
+            if (!item) {
+              return itemName;
+            } else if (Array.isArray(item)) {
+              const returnValue = item.length === 0 ? itemName : '';
+              return returnValue;
+            }
+            return '';
+          }));
+        }, []);
+
         validity = validity.concat(inputs.map((it) => validateField(it, department[it], newErrors)));
-        console.log(inputs, departmentName);
       }
     }
 
@@ -224,7 +235,7 @@ class MyForm extends React.Component {
     const isFormValid = this.validateForm();
 
     if (isFormValid) {
-      console.log(JSON.stringify(this.state));
+      console.log(JSON.stringify(this.state.fields));
     } else {
       console.log('form is invalid');
     }
@@ -278,20 +289,27 @@ class MyForm extends React.Component {
         <h2 className='form__title'>Признание в системе</h2>
         <div className='form__association'>
           <label>
-            <input type='radio' name='association' value={true}
+            <input
+              type='radio'
+              name='association'
+              value={'yes'}
               onChange={this.onInputChangeHandler}/>
               Да
           </label>
           <label>
-            <input type='radio' name='association'
-              value={false}
+            <input
+              type='radio'
+              name='association'
+              value={'no'}
+              checked={this.state.association === 'no'}
               onChange={this.onInputChangeHandler}/>
               Нет
           </label>
 
-          {this.state.association === 'true' ?
+          {this.state.association === 'yes' ?
             <SystemIdentificationForm
               department={this.state.department}
+              fields={this.state.fields}
               checkboxes={systemCheckboxes}
               inputs={systemInputs}
               onChange={this.onInputChangeHandler}

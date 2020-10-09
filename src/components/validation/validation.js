@@ -28,11 +28,15 @@ export const validateField = (name, value, errors) => {
   }
 };
 
-export const validateActivityField = (name, value, errors) => {
+export const validateActivityField = (name, value) => {
+  const errors = {};
+
   const re = /^\d+$/;
   const validity = re.test(value);
 
   if (!validity) {
     errors[name] = 'допускаются только цифры';
   }
+
+  return errors;
 };
