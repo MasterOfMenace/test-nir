@@ -19,8 +19,8 @@ class Input extends React.Component {
     } = this.props;
 
     return (
-      <>
-        <label htmlFor={id}>{label}</label>
+      <div className={'form__input-wrapper'}>
+        <label className={'form__input-label'} htmlFor={id}>{label}</label>
         <input
           type={type}
           id={id}
@@ -29,8 +29,8 @@ class Input extends React.Component {
           placeholder={placeholder}
           onChange={onChange}
           style={errors[id] ? {borderColor: 'red'} : null}/>
-        <span style={{color: 'red'}}>{errors[id]}</span>
-      </>
+        <span className={'form__error-tooltip'}>{errors[id]}</span>
+      </div>
     );
   }
 }

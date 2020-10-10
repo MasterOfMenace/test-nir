@@ -246,55 +246,61 @@ class MyForm extends React.Component {
       <form
         className='form'
         onSubmit={this.submitHandler}>
-        {organizationInputs.map((input) => (
-          <Input
-            key={`${input.id}-key`}
-            label={input.label}
-            type={input.type}
-            id={input.id}
-            name={input.name}
-            className={'form__input'}
-            placeholder={input.placeholder}
-            onChange={this.onInputChangeHandler}
-            errors={this.state.errors} />
-        ))}
-        <h2 className='form__title'>Руководитель</h2>
-        {ceoInputs.map((input) => (
-          <Input
-            key={`${input.id}-key`}
-            label={input.label}
-            type={input.type}
-            id={input.id}
-            name={input.name}
-            className={'form__input'}
-            placeholder={input.placeholder}
-            onChange={this.onInputChangeHandler}
-            errors={this.state.errors} />
-        ))}
+        <div className="form__subform">
+          {organizationInputs.map((input) => (
+            <Input
+              key={`${input.id}-key`}
+              label={input.label}
+              type={input.type}
+              id={input.id}
+              name={input.name}
+              className={'form__input'}
+              placeholder={input.placeholder}
+              onChange={this.onInputChangeHandler}
+              errors={this.state.errors} />
+          ))}
+        </div>
+        <div className="form__subform">
+          <h2 className='form__title'>Руководитель</h2>
+          {ceoInputs.map((input) => (
+            <Input
+              key={`${input.id}-key`}
+              label={input.label}
+              type={input.type}
+              id={input.id}
+              name={input.name}
+              className={'form__input'}
+              placeholder={input.placeholder}
+              onChange={this.onInputChangeHandler}
+              errors={this.state.errors} />
+          ))}
+        </div>
+        <div className="form__subform">
+          <h2 className='form__title'>Фактический адрес</h2>
+          {addressInputs.map((input) => (
+            <Input
+              key={`${input.id}-key`}
+              label={input.label}
+              type={input.type}
+              id={input.id}
+              name={input.name}
+              className={'form__input'}
+              placeholder={input.placeholder}
+              onChange={this.onInputChangeHandler}
+              errors={this.state.errors} />
+          ))}
+        </div>
 
-        <h2 className='form__title'>Фактический адрес</h2>
-        {addressInputs.map((input) => (
-          <Input
-            key={`${input.id}-key`}
-            label={input.label}
-            type={input.type}
-            id={input.id}
-            name={input.name}
-            className={'form__input'}
-            placeholder={input.placeholder}
-            onChange={this.onInputChangeHandler}
-            errors={this.state.errors} />
-        ))}
 
-        <h2 className='form__title'>Признание в системе</h2>
-        <div className='form__association'>
+        <div className='form__subform'>
+          <h2 className='form__title'>Признание в системе</h2>
           <label>
             <input
               type='radio'
               name='association'
               value={'yes'}
               onChange={this.onInputChangeHandler}/>
-              Да
+              Есть
           </label>
           <label>
             <input
@@ -305,8 +311,9 @@ class MyForm extends React.Component {
               onChange={this.onInputChangeHandler}/>
               Нет
           </label>
-
-          {this.state.association === 'yes' ?
+        </div>
+        {this.state.association === 'yes' ?
+          <div className="form__subform">
             <SystemIdentificationForm
               department={this.state.department}
               fields={this.state.fields}
@@ -317,8 +324,9 @@ class MyForm extends React.Component {
               onActivityChange={this.onActivityFieldInputChangeHandler}
               errors={this.state.errors}
               onAddButtonClickHandler={this.onLicenseAddButtonClickHandler}
-              onDeleteButtonClickHandler={this.onLicenseDeleteButtonClickHandler}/> : null}
-        </div>
+              onDeleteButtonClickHandler={this.onLicenseDeleteButtonClickHandler}/>
+          </div> : null}
+
 
         <button type="submit" className='submit-button'>Далее</button>
       </form>

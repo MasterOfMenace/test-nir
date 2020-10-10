@@ -1,18 +1,41 @@
 .form {
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   width: 50%;
   padding: 20px;
   color: #a5a5a5;
   font-size: 12px;
 }
 
+.form__subform {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 30px;
+}
+
+.form__input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-bottom: 10px;
+}
+
+.form__input-label {
+  width: 100%;
+  padding-bottom: 5px;
+}
+
 .form__input {
+  width: 50%;
   font-size: 12px;
   padding: 8px;
   border: 1px solid #bfbfbf;
   border-radius: 6px;
+}
+
+.form__input--activity {
+  width: 25%;
 }
 
 .form__title {
@@ -20,11 +43,7 @@
   padding: 0;
   color: #595959;
   font-size: 14px;
-}
-
-.form__association {
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 15px;
 }
 
 .form__association-subform {
@@ -37,12 +56,26 @@
   color: #595959;
 }
 
+.add-button {
+  width: 25%;
+}
+
 .submit-button {
   width: 25%;
+  margin-top: 25px;
   background-color: #0b7abf;
   border: none;
   padding: 8px;
   border-radius: 6px;
   color: white;
   cursor: pointer;
+}
+
+.form__error-tooltip {
+  color: red;
+  margin-left: 20px;
+}
+
+.form__error-input {
+  border-color: red;
 }

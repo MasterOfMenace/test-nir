@@ -39,7 +39,7 @@ class SystemIdentificationForm extends React.Component {
     const licenseInputError = errors[`${departmentName}-activityField`];
 
     return (
-      <div className={'form__association-subform'}>
+      <div className={'form__subform'}>
         {inputs.map((input) => (
           <Input
             key={`${departmentName}-${input.id}-key`}
@@ -47,14 +47,14 @@ class SystemIdentificationForm extends React.Component {
             type={input.type}
             id={`${departmentName}-${input.id}`}
             name={`${departmentName}-${input.name}`}
-            className={'form__input'}
+            className={input.name === 'activityField' ? 'form__input form__input--activity' : 'form__input'}
             placeholder={input.placeholder}
             onChange={input.name === 'activityField' ? onActivityChange : onLicenseChange}
             errors={errors}
           />
         ))}
         {licenseInputError ?
-          null : <button type='button' onClick={onAddButtonClickHandler(departmentName)}>Добавить</button>}
+          null : <button className={'add-button'} type='button' onClick={onAddButtonClickHandler(departmentName)}>Добавить</button>}
         <div>
           {licenses.map((license, i) => (
             <div key={i}>

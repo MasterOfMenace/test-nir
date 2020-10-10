@@ -1,13 +1,13 @@
 export const organizationInputs = [
   {
-    label: 'Полное наименование испытательной лаборатории',
+    label: 'Сокращенное наименование испытательной лаборатории',
     type: 'text',
     id: 'centerName',
     name: 'centerName',
     placeholder: 'ВНИИГАЗ',
   },
   {
-    label: 'Сокращенное наименование испытательной лаборатории',
+    label: 'Полное наименование испытательной лаборатории',
     type: 'text',
     id: 'shortCenterName',
     name: 'shortCenterName',
