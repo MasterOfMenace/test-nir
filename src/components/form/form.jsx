@@ -3,6 +3,7 @@ import Input from '../input/input.jsx';
 import SystemIdentificationForm from '../system-identification/system-identification.jsx';
 import {organizationInputs, ceoInputs, addressInputs, systemAssociationCheckboxes as systemCheckboxes, systemIdentificationSubformInputs as systemInputs} from '../../mocks/mocks.js';
 import {validateField, validateActivityField} from '../validation/validation.js';
+import {prepareData} from '../../utils.js';
 class MyForm extends React.Component {
   constructor(props) {
     super(props);
@@ -26,7 +27,16 @@ class MyForm extends React.Component {
         building: '',
       },
       association: 'no',
-      department: {},
+      department: {
+        management: false,
+        security: false,
+        tubes: false,
+        technologistEquipment: false,
+        industrialSafety: false,
+        weldingEquipment: false,
+        serviceParts: false,
+        petroleum: false
+      },
       errors: {},
     };
 
@@ -167,6 +177,7 @@ class MyForm extends React.Component {
   showFirstInvalidField(errors) {
     const elementId = Object.keys(errors)[0];
     const element = document.getElementById(elementId);
+    console.log(errors, elementId);
     element.scrollIntoView();
   }
 
@@ -201,26 +212,20 @@ class MyForm extends React.Component {
         });
 
         const inputs = departmentNames.reduce((acc, name) => {
-          return acc.concat(systemInputs.map((it) => {
-            const itemName = `${name}-${it.name}`;
-            const item = fields[itemName];
-            if (!item) {
-              return itemName;
-            } else if (Array.isArray(item)) {
-              const returnValue = item.length === 0 ? itemName : '';
-              return returnValue;
-            }
-            return '';
-          }));
+          return acc.concat(systemInputs.map((it) => `${name}-${it.name}`));
         }, []);
 
-        validity = validity.concat(inputs.map((it) => validateField(it, department[it], newErrors)));
+        console.log(`inputs ${inputs}`);
+
+        validity = validity.concat(inputs.map((it) => validateField(it, fields[it], newErrors)));
       }
     }
 
     this.setState({
       errors: newErrors,
     });
+
+    console.log(validity);
     const isFormValid = validity.every((elem) => elem === true);
 
     if (!isFormValid) {
@@ -235,7 +240,8 @@ class MyForm extends React.Component {
     const isFormValid = this.validateForm();
 
     if (isFormValid) {
-      console.log(JSON.stringify(this.state.fields));
+      // console.log(JSON.stringify(this.state.fields));
+      console.log(prepareData(this.state.fields, this.state.department));
     } else {
       console.log('form is invalid');
     }

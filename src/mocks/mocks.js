@@ -118,48 +118,56 @@ export const systemAssociationCheckboxes = [
     type: 'checkbox',
     name: 'department',
     value: 'management',
+    id: 'management'
   },
   {
     label: 'ЦОС "Инженерно-технические средства охраны, средства защиты и информации"',
     type: 'checkbox',
     name: 'department',
     value: 'security',
+    id: 'security'
   },
   {
     label: 'ЦОС "Трубная продукция"',
     type: 'checkbox',
     name: 'department',
     value: 'tubes',
+    id: 'tubes'
   },
   {
     label: 'ЦОС "Технологическое оборудование и материалы, энергетическое оборудование, приборы и средства автоматизации, вычислительная техника, программные средства"',
     type: 'checkbox',
     name: 'department',
     value: 'technologistEquipment',
+    id: 'technologistEquipment',
   },
   {
     label: 'ЦОС "Производственная безопасность"',
     type: 'checkbox',
     name: 'department',
     value: 'industrialSafety',
+    id: 'industrialSafety'
   },
   {
     label: 'ЦОС "Оборудование и материалы для сварки, неразрушающего контроля сварных соединений и врезки под давлением"',
     type: 'checkbox',
     name: 'department',
     value: 'weldingEquipment',
+    id: 'weldingEquipment'
   },
   {
     label: 'ЦОС "Запасные части и комплектующие для технического обслуживания и ремонта"',
     type: 'checkbox',
     name: 'department',
     value: 'serviceParts',
+    id: 'serviceParts'
   },
   {
     label: 'ЦОС "Газ, конденсат, нефть, продукты их переработки"',
     type: 'checkbox',
     name: 'department',
     value: 'petroleum',
+    id: 'petroleum'
   },
 ];
 

@@ -56,8 +56,56 @@
   color: #595959;
 }
 
+.form__license-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.form__license {
+  min-width: 100px;
+  border-radius: 6px;
+  padding: 5px;
+  margin: 0 5px 5px 0;
+  background-color: #cee4f2;
+  color: #0b7abf;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .add-button {
   width: 25%;
+}
+
+.delete-button {
+  font-size: 0;
+  border: none;
+  position: relative;
+  width: 10px;
+  height: 10px;
+  background: none;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.delete-button::before,
+.delete-button::after{
+  content: '';
+  width: 2px;
+  height: 17px;
+  background-color: #0b7abf;
+  position: absolute;
+  top: -4px;
+  right: 2px;
+}
+
+.delete-button::before {
+  transform: rotate(45deg);
+}
+
+.delete-button::after {
+  transform: rotate(-45deg);
 }
 
 .submit-button {

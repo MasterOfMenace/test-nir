@@ -19,6 +19,7 @@ class SystemIdentificationForm extends React.Component {
               <input
                 name={checkbox.name}
                 type={checkbox.type}
+                id={checkbox.id}
                 value={checkbox.value}
                 onChange={onChange}
               />
@@ -55,11 +56,13 @@ class SystemIdentificationForm extends React.Component {
         ))}
         {licenseInputError ?
           null : <button className={'add-button'} type='button' onClick={onAddButtonClickHandler(departmentName)}>Добавить</button>}
-        <div>
+        <div className={'form__license-wrapper'}>
           {licenses.map((license, i) => (
-            <div key={i}>
+            <div
+              key={i}
+              className={'form__license'}>
               {license}
-              <button type='button' onClick={onDeleteButtonClickHandler(departmentName, license)}>Удалить</button>
+              <button type='button' className={'delete-button'} onClick={onDeleteButtonClickHandler(departmentName, license)}>Удалить</button>
             </div>
           ))}
         </div>
