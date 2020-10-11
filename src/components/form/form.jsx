@@ -177,15 +177,14 @@ class MyForm extends React.Component {
   showFirstInvalidField(errors) {
     const elementId = Object.keys(errors)[0];
     const element = document.getElementById(elementId);
-    console.log(errors, elementId);
     element.scrollIntoView();
   }
 
   validateForm() {
     const newErrors = {};
     let validity = [];
-    // inputs
 
+    // inputs
     const fields = this.state.fields;
     const keys = Object.keys(fields);
     validity = validity.concat(keys.map((key) => validateField(key, fields[key], newErrors)));
@@ -215,8 +214,6 @@ class MyForm extends React.Component {
           return acc.concat(systemInputs.map((it) => `${name}-${it.name}`));
         }, []);
 
-        console.log(`inputs ${inputs}`);
-
         validity = validity.concat(inputs.map((it) => validateField(it, fields[it], newErrors)));
       }
     }
@@ -225,7 +222,6 @@ class MyForm extends React.Component {
       errors: newErrors,
     });
 
-    console.log(validity);
     const isFormValid = validity.every((elem) => elem === true);
 
     if (!isFormValid) {
@@ -240,8 +236,8 @@ class MyForm extends React.Component {
     const isFormValid = this.validateForm();
 
     if (isFormValid) {
-      // console.log(JSON.stringify(this.state.fields));
-      console.log(prepareData(this.state.fields, this.state.department));
+      const json = JSON.stringify(prepareData(this.state.fields, this.state.department));
+      console.log(json);
     } else {
       console.log('form is invalid');
     }
@@ -334,7 +330,7 @@ class MyForm extends React.Component {
           </div> : null}
 
 
-        <button type="submit" className='submit-button'>Далее</button>
+        <button type="submit" className='form__submit-button'>Далее</button>
       </form>
     );
   }

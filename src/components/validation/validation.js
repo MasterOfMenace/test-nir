@@ -1,5 +1,4 @@
 export const validateField = (name, value, errors) => {
-  console.log(name, value);
   if (!value) {
     errors[name] = 'поле не должно быть пустым';
     return false;

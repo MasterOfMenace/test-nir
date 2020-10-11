@@ -35,7 +35,7 @@
 }
 
 .form__input--activity {
-  width: 25%;
+  width: 20%;
 }
 
 .form__title {
@@ -74,11 +74,14 @@
   justify-content: space-between;
 }
 
-.add-button {
-  width: 25%;
+.form__add-button {
+  background: none;
+  border: none;
+  color: #0b7abf;
+  cursor: pointer;
 }
 
-.delete-button {
+.form__delete-button {
   font-size: 0;
   border: none;
   position: relative;
@@ -89,8 +92,8 @@
   margin-left: 5px;
 }
 
-.delete-button::before,
-.delete-button::after{
+.form__delete-button::before,
+.form__delete-button::after{
   content: '';
   width: 2px;
   height: 17px;
@@ -100,15 +103,15 @@
   right: 2px;
 }
 
-.delete-button::before {
+.form__delete-button::before {
   transform: rotate(45deg);
 }
 
-.delete-button::after {
+.form__delete-button::after {
   transform: rotate(-45deg);
 }
 
-.submit-button {
+.form__submit-button {
   width: 25%;
   margin-top: 25px;
   background-color: #0b7abf;

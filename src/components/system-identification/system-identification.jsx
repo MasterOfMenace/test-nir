@@ -37,8 +37,6 @@ class SystemIdentificationForm extends React.Component {
 
     const licenses = fields[`${departmentName}-activityField`] ? Array.from(fields[`${departmentName}-activityField`]) : [];
 
-    const licenseInputError = errors[`${departmentName}-activityField`];
-
     return (
       <div className={'form__subform'}>
         {inputs.map((input) => (
@@ -52,17 +50,17 @@ class SystemIdentificationForm extends React.Component {
             placeholder={input.placeholder}
             onChange={input.name === 'activityField' ? onActivityChange : onLicenseChange}
             errors={errors}
+            button={input.name === 'activityField' ? 'Добавить' : null}
+            onButtonClick={input.name === 'activityField' ? onAddButtonClickHandler(departmentName) : null}
           />
         ))}
-        {licenseInputError ?
-          null : <button className={'add-button'} type='button' onClick={onAddButtonClickHandler(departmentName)}>Добавить</button>}
         <div className={'form__license-wrapper'}>
           {licenses.map((license, i) => (
             <div
               key={i}
               className={'form__license'}>
               {license}
-              <button type='button' className={'delete-button'} onClick={onDeleteButtonClickHandler(departmentName, license)}>Удалить</button>
+              <button type='button' className={'form__delete-button'} onClick={onDeleteButtonClickHandler(departmentName, license)}>Удалить</button>
             </div>
           ))}
         </div>
