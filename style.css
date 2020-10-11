@@ -1,0 +1,132 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  /* margin: 0 auto; */
+  width: 50%;
+  padding: 20px;
+  color: #a5a5a5;
+  font-size: 12px;
+}
+
+.form__subform {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 30px;
+}
+
+.form__input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-bottom: 10px;
+}
+
+.form__input-label {
+  width: 100%;
+  padding-bottom: 5px;
+}
+
+.form__input {
+  width: 50%;
+  font-size: 12px;
+  padding: 8px;
+  border: 1px solid #bfbfbf;
+  border-radius: 6px;
+}
+
+.form__input--activity {
+  width: 20%;
+}
+
+.form__title {
+  margin: 0;
+  padding: 0;
+  color: #595959;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.form__association-subform {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.form__checkbox-label {
+  color: #595959;
+}
+
+.form__license-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.form__license {
+  min-width: 100px;
+  border-radius: 6px;
+  padding: 5px;
+  margin: 0 5px 5px 0;
+  background-color: #cee4f2;
+  color: #0b7abf;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form__add-button {
+  background: none;
+  border: none;
+  color: #0b7abf;
+  cursor: pointer;
+}
+
+.form__delete-button {
+  font-size: 0;
+  border: none;
+  position: relative;
+  width: 10px;
+  height: 10px;
+  background: none;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.form__delete-button::before,
+.form__delete-button::after{
+  content: '';
+  width: 2px;
+  height: 17px;
+  background-color: #0b7abf;
+  position: absolute;
+  top: -4px;
+  right: 2px;
+}
+
+.form__delete-button::before {
+  transform: rotate(45deg);
+}
+
+.form__delete-button::after {
+  transform: rotate(-45deg);
+}
+
+.form__submit-button {
+  width: 25%;
+  margin-top: 25px;
+  background-color: #0b7abf;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+}
+
+.form__error-tooltip {
+  color: red;
+  margin-left: 20px;
+}
+
+.form__error-input {
+  border-color: red;
+}
