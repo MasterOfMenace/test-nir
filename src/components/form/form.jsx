@@ -66,8 +66,7 @@ class MyForm extends React.Component {
   onLicenseAddButtonClickHandler(departmentName) {
     return () => {
       const field = document.getElementById(`${departmentName}-activityField`);
-      const name = field.name;
-      const value = field.value;
+      const {name, value} = field;
       const activityField = this.state.fields[name] ? [...this.state.fields[name]] : [];
       activityField.push(value);
       const newActivityField = Array.from(new Set(activityField));
@@ -177,7 +176,10 @@ class MyForm extends React.Component {
   showFirstInvalidField(errors) {
     const elementId = Object.keys(errors)[0];
     const element = document.getElementById(elementId);
-    element.scrollIntoView();
+
+    if (element) {
+      element.scrollIntoView();
+    }
   }
 
   validateForm() {
@@ -196,6 +198,7 @@ class MyForm extends React.Component {
       const department = this.state.department;
       const checkboxes = systemCheckboxes.map((checkbox) => checkbox.value);
       const isChecked = Object.values(department).some((el) => el === true);
+
       if (!isChecked) {
         validity = validity.concat(checkboxes.map((key) => validateField(key, department[key], newErrors)));
       } else {

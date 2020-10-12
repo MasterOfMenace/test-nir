@@ -7,33 +7,16 @@ class SystemIdentificationForm extends React.Component {
     super(props);
   }
 
-  renderSystemIdentificationForm() {
-    const {department, checkboxes, onChange, errors} = this.props;
-
-    return (
-      <>
-        <h2 className='form__title'>Центральный орган системы, выдавший свидетельство испытательной лаборатории</h2>
-        {checkboxes.map((checkbox, i) => (
-          <div key={`checkbox-${i}`}>
-            <label className='form__checkbox-label' style={!errors[checkbox.value] ? null : {color: 'red'}}>
-              <input
-                name={checkbox.name}
-                type={checkbox.type}
-                id={checkbox.id}
-                value={checkbox.value}
-                onChange={onChange}
-              />
-              {checkbox.label}
-            </label>
-            {department[checkbox.value] ? this.renderSystemIdentificationSubForm(checkbox.value) : null}
-          </div>
-        ))}
-      </>
-    );
-  }
-
   renderSystemIdentificationSubForm(departmentName) {
-    const {inputs, onLicenseChange, errors, onAddButtonClickHandler, fields, onDeleteButtonClickHandler, onActivityChange} = this.props;
+    const {
+      inputs,
+      onLicenseChange,
+      errors,
+      onAddButtonClickHandler,
+      fields,
+      onDeleteButtonClickHandler,
+      onActivityChange
+    } = this.props;
 
     const licenses = fields[`${departmentName}-activityField`] ? Array.from(fields[`${departmentName}-activityField`]) : [];
 
@@ -69,9 +52,35 @@ class SystemIdentificationForm extends React.Component {
   }
 
   render() {
+    const {
+      department,
+      checkboxes,
+      onChange,
+      errors
+    } = this.props;
+
     return (
       <>
-        {this.renderSystemIdentificationForm()}
+        <h2 className='form__title'>Центральный орган системы, выдавший свидетельство испытательной лаборатории</h2>
+        {
+          checkboxes.map((checkbox) => (
+            <div key={`${checkbox.name}-${checkbox.value}-key`}>
+              <label className='form__checkbox-label' style={!errors[checkbox.value] ? null : {color: 'red'}}>
+                <input
+                  name={checkbox.name}
+                  type={checkbox.type}
+                  id={checkbox.id}
+                  value={checkbox.value}
+                  onChange={onChange}
+                />
+                {checkbox.label}
+              </label>
+              {
+                department[checkbox.value] && this.renderSystemIdentificationSubForm(checkbox.value)
+              }
+            </div>
+          ))
+        }
       </>
     );
   }

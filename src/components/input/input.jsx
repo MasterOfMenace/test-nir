@@ -24,7 +24,12 @@ class Input extends React.Component {
 
     return (
       <div className={'form__input-wrapper'}>
-        <label className={'form__input-label'} htmlFor={id}>{label}</label>
+        <label
+          className={'form__input-label'}
+          htmlFor={id}
+        >
+          {label}
+        </label>
         <input
           type={type}
           id={id}
@@ -32,16 +37,21 @@ class Input extends React.Component {
           className={className}
           placeholder={placeholder}
           onChange={onChange}
-          style={errors[id] ? {borderColor: 'red'} : null}/>
-        <span className={'form__error-tooltip'}>{errors[id]}</span>
-        {button && !inputError ?
+          style={errors[id] ? {borderColor: 'red'} : null}
+        />
+        <span className={'form__error-tooltip'}>
+          {errors[id]}
+        </span>
+        {
+          button && !inputError &&
           <button
             className={'form__add-button'}
             type='button'
             onClick={onButtonClick}
           >
             {button}
-          </button> : null}
+          </button>
+        }
       </div>
     );
   }
